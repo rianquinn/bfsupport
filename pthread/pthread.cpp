@@ -19,12 +19,15 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
+#include <cerrno>
+#include <cstring>
+#include <cstdint>
+
+#include <unistd.h>
 #include <pthread.h>
 
-#include <errno.h>
-#include <unistd.h>
-#include <string.h>
-#include <stdint.h>
+#include <bfgsl.h>
+#include <bfexports.h>
 
 #define MAX_THREAD_SPECIFIC_DATA 512
 
@@ -55,7 +58,7 @@ extern "C" uint64_t thread_context_tlsptr(void);
 void *threadSpecificData[MAX_THREAD_SPECIFIC_DATA] = {0};
 #endif
 
-extern "C" int
+extern "C" EXPORT_SYM int
 pthread_cond_broadcast(pthread_cond_t *cond)
 {
     if (!cond)
@@ -66,14 +69,14 @@ pthread_cond_broadcast(pthread_cond_t *cond)
     return 0;
 }
 
-extern "C" int
+extern "C" EXPORT_SYM int
 pthread_cond_destroy(pthread_cond_t *)
 {
     UNHANDLED();
     return -ENOSYS;
 }
 
-extern "C" int
+extern "C" EXPORT_SYM int
 pthread_cond_init(pthread_cond_t *cond, const pthread_condattr_t *attr)
 {
     if (attr)
@@ -86,21 +89,21 @@ pthread_cond_init(pthread_cond_t *cond, const pthread_condattr_t *attr)
     return 0;
 }
 
-extern "C" int
+extern "C" EXPORT_SYM int
 pthread_cond_signal(pthread_cond_t *)
 {
     UNHANDLED();
     return -ENOSYS;
 }
 
-extern "C" int
+extern "C" EXPORT_SYM int
 pthread_cond_timedwait(pthread_cond_t *, pthread_mutex_t *, const struct timespec *)
 {
     UNHANDLED();
     return -ENOSYS;
 }
 
-extern "C" int
+extern "C" EXPORT_SYM int
 pthread_cond_wait(pthread_cond_t *cond, pthread_mutex_t *mutex)
 {
     if (!cond || !mutex)
@@ -115,21 +118,21 @@ pthread_cond_wait(pthread_cond_t *cond, pthread_mutex_t *mutex)
     return 0;
 }
 
-extern "C" int
+extern "C" EXPORT_SYM int
 pthread_detach(pthread_t)
 {
     UNHANDLED();
     return -ENOSYS;
 }
 
-extern "C" int
+extern "C" EXPORT_SYM int
 pthread_equal(pthread_t, pthread_t)
 {
     UNHANDLED();
     return -ENOSYS;
 }
 
-extern "C" void *
+extern "C" EXPORT_SYM void *
 pthread_getspecific(pthread_key_t key)
 {
     if (key > MAX_THREAD_SPECIFIC_DATA)
@@ -142,14 +145,14 @@ pthread_getspecific(pthread_key_t key)
     return threadSpecificData[key];
 }
 
-extern "C" int
+extern "C" EXPORT_SYM int
 pthread_join(pthread_t, void **)
 {
     UNHANDLED();
     return -ENOSYS;
 }
 
-extern "C" int
+extern "C" EXPORT_SYM int
 pthread_key_create(pthread_key_t *key, void (*destructor)(void *))
 {
     static int64_t g_keys = 0;
@@ -165,21 +168,21 @@ pthread_key_create(pthread_key_t *key, void (*destructor)(void *))
     return 0;
 }
 
-extern "C" int
+extern "C" EXPORT_SYM int
 pthread_key_delete(pthread_key_t)
 {
     UNHANDLED();
     return -ENOSYS;
 }
 
-extern "C" int
+extern "C" EXPORT_SYM int
 pthread_mutex_destroy(pthread_mutex_t *)
 {
     UNHANDLED();
     return -ENOSYS;
 }
 
-extern "C" int
+extern "C" EXPORT_SYM int
 pthread_mutex_init(pthread_mutex_t *mutex, const pthread_mutexattr_t *attr)
 {
     if (attr)
@@ -192,7 +195,7 @@ pthread_mutex_init(pthread_mutex_t *mutex, const pthread_mutexattr_t *attr)
     return 0;
 }
 
-extern "C" int
+extern "C" EXPORT_SYM int
 pthread_mutex_lock(pthread_mutex_t *mutex)
 {
     if (!mutex)
@@ -203,14 +206,14 @@ pthread_mutex_lock(pthread_mutex_t *mutex)
     return 0;
 }
 
-extern "C" int
+extern "C" EXPORT_SYM int
 pthread_mutex_trylock(pthread_mutex_t *)
 {
     UNHANDLED();
     return -ENOSYS;
 }
 
-extern "C" int
+extern "C" EXPORT_SYM int
 pthread_mutex_unlock(pthread_mutex_t *mutex)
 {
     if (!mutex)
@@ -221,28 +224,28 @@ pthread_mutex_unlock(pthread_mutex_t *mutex)
     return 0;
 }
 
-extern "C" int
+extern "C" EXPORT_SYM int
 pthread_mutexattr_destroy(pthread_mutexattr_t *)
 {
     UNHANDLED();
     return -ENOSYS;
 }
 
-extern "C" int
+extern "C" EXPORT_SYM int
 pthread_mutexattr_init(pthread_mutexattr_t *)
 {
     UNHANDLED();
     return -ENOSYS;
 }
 
-extern "C" int
+extern "C" EXPORT_SYM int
 pthread_mutexattr_settype(pthread_mutexattr_t *, int)
 {
     UNHANDLED();
     return -ENOSYS;
 }
 
-extern "C" int
+extern "C" EXPORT_SYM int
 pthread_once(pthread_once_t *once, void (*init)(void))
 {
     if (!once || !init)
@@ -254,14 +257,14 @@ pthread_once(pthread_once_t *once, void (*init)(void))
     return 0;
 }
 
-extern "C" pthread_t
+extern "C" EXPORT_SYM pthread_t
 pthread_self(void)
 {
     UNHANDLED();
     return 1;
 }
 
-extern "C" int
+extern "C" EXPORT_SYM int
 pthread_setspecific(pthread_key_t key, const void *data)
 {
     if (key > MAX_THREAD_SPECIFIC_DATA)

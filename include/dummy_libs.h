@@ -25,9 +25,25 @@
 #include <stddef.h>
 #include <stdint.h>
 
+// -----------------------------------------------------------------------------
+// Exports
+// -----------------------------------------------------------------------------
+
+#include <bfexports.h>
+
+#ifdef COMPILING_DUMMY
+#define EXPORT_DUMMY EXPORT_SYM
+#else
+#define EXPORT_DUMMY IMPORT_SYM
+#endif
+
+// -----------------------------------------------------------------------------
+// Definitions
+// -----------------------------------------------------------------------------
+
 /* @cond */
 
-class base
+class EXPORT_DUMMY base
 {
 public:
     base() noexcept = default;
@@ -40,7 +56,7 @@ public:
     }
 };
 
-class derived1 : public base
+class EXPORT_DUMMY derived1 : public base
 {
 public:
     derived1() noexcept;
@@ -53,7 +69,7 @@ private:
     int m_member;
 };
 
-class derived2 : public base
+class EXPORT_DUMMY derived2 : public base
 {
 public:
     derived2() noexcept;

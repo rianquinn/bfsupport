@@ -20,6 +20,7 @@
 #define NEED_GSL_LITE
 
 #include <bfgsl.h>
+#include <bfexports.h>
 #include <bfsupport.h>
 #include <bfconstants.h>
 #include <bfehframelist.h>
@@ -27,19 +28,12 @@
 typedef void (*init_t)();
 typedef void (*fini_t)();
 
-int
-main(int argc, const char *argv[]);
+int main(int argc, const char *argv[]);
 
-void *__dso_handle = 0;
+extern int __g_eh_frame_list_num;
+extern eh_frame_t __g_eh_frame_list[MAX_NUM_MODULES];
 
-auto __g_eh_frame_list_num = 0ULL;
-eh_frame_t __g_eh_frame_list[MAX_NUM_MODULES] = {};
-
-extern "C" struct eh_frame_t *
-get_eh_frame_list() noexcept
-{
-    return __g_eh_frame_list;
-}
+EXPORT_SYM void *__dso_handle = 0;
 
 extern "C" void
 __bareflank_init(section_info_t *info) noexcept

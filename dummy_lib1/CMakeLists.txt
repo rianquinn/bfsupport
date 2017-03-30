@@ -2,11 +2,14 @@
 # CMake Includes
 # ------------------------------------------------------------------------------
 
-if(NOT CMAKE_TOOLCHAIN_FILE)
-    include("${CMAKE_INSTALL_PREFIX}/cmake/CMakeFlags_Native.txt")
-endif()
-
 include("${CMAKE_INSTALL_PREFIX}/cmake/CMakeGlobal_Includes.txt")
+
+# ------------------------------------------------------------------------------
+# Exports
+# ------------------------------------------------------------------------------
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DCOMPILING_DUMMY")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DCOMPILING_DUMMY")
 
 # ------------------------------------------------------------------------------
 # Custom Flags
@@ -24,7 +27,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-sized-deallocation")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-use-cxa-atexit")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-stack-protector")
 
-if(CYGWIN OR WIN32)
+if(NOT CYGWIN AND NOT WIN32)
     set(CMAKE_SHARED_LINKER_FLAGS "--fuse-ld=gold")
 endif()
 
@@ -32,8 +35,9 @@ endif()
 # Targets
 # ------------------------------------------------------------------------------
 
-add_library(dummy_lib1 SHARED dummy_lib1.cpp)
-add_library(dummy_lib1_static STATIC dummy_lib1.cpp)
+add_library(lib1 OBJECT dummy_lib1.cpp)
+add_library(dummy_lib1 SHARED $<TARGET_OBJECTS:lib1>)
+add_library(dummy_lib1_static STATIC $<TARGET_OBJECTS:lib1>)
 
 # ------------------------------------------------------------------------------
 # Install

@@ -19,12 +19,10 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
-#define NEED_GSL_LITE
-
-#include <stddef.h>
-#include <stdint.h>
-
 #include <bfgsl.h>
+#include <bfexports.h>
+
+#include <exception>
 #include <dummy_libs.h>
 
 derived1 g_derived1;
@@ -36,6 +34,12 @@ main(int argc, char *argv[])
     ignored(argc);
     ignored(argv);
 
+    try {
+        throw std::runtime_error("test exceptions");
+    }
+    catch(std::exception &)
+    { }
+
     return g_derived1.foo(atoi(argv[0])) + g_derived2.foo(atoi(argv[1]));
 }
 
@@ -44,9 +48,9 @@ main(int argc, char *argv[])
 // -----------------------------------------------------------------------------
 
 int g_cursor = 0;
-char g_memory[0x1000] = {};
+char g_memory[0x10000] = {};
 
-extern "C" int
+extern "C" EXPORT_SYM int
 write(int file, const void *buffer, size_t count)
 {
     ignored(file);
@@ -56,7 +60,7 @@ write(int file, const void *buffer, size_t count)
     return 0;
 }
 
-extern "C" void *
+extern "C" EXPORT_SYM void *
 _malloc_r(struct _reent *ent, size_t size)
 {
     ignored(ent);
@@ -67,24 +71,26 @@ _malloc_r(struct _reent *ent, size_t size)
     return addr;
 }
 
-extern "C" void
+extern "C" EXPORT_SYM void
 _free_r(struct _reent *ent, void *ptr)
 {
     ignored(ent);
     ignored(ptr);
 }
 
-extern "C" void *
+extern "C" EXPORT_SYM void *
 _calloc_r(struct _reent *ent, size_t nmemb, size_t size)
 {
     ignored(ent);
-    ignored(nmemb);
-    ignored(size);
+
+    if (auto ptr = malloc(nmemb * size)) {
+        return memset(ptr, 0, nmemb * size);
+    }
 
     return nullptr;
 }
 
-extern "C" void *
+extern "C" EXPORT_SYM void *
 _realloc_r(struct _reent *ent, void *ptr, size_t size)
 {
     ignored(ent);

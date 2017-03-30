@@ -2,10 +2,6 @@
 # CMake Includes
 # ------------------------------------------------------------------------------
 
-if(NOT CMAKE_TOOLCHAIN_FILE)
-    include("${CMAKE_INSTALL_PREFIX}/cmake/CMakeFlags_Native.txt")
-endif()
-
 include("${CMAKE_INSTALL_PREFIX}/cmake/CMakeGlobal_Includes.txt")
 
 # ------------------------------------------------------------------------------
@@ -22,15 +18,15 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-sized-deallocation")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-use-cxa-atexit")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-main")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-stack-protector")
 
 # ------------------------------------------------------------------------------
 # Targets
 # ------------------------------------------------------------------------------
 
-add_library(syscall SHARED syscall.cpp)
-add_library(syscall_static STATIC syscall.cpp)
+add_library(call OBJECT syscall.cpp)
+add_library(syscall SHARED $<TARGET_OBJECTS:call>)
+add_library(syscall_static STATIC $<TARGET_OBJECTS:call>)
 
 # ------------------------------------------------------------------------------
 # Install
