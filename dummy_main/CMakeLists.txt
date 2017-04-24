@@ -23,7 +23,7 @@ target_link_libraries(dummy_main c++abi)
 target_link_libraries(dummy_main c)
 target_link_libraries(dummy_main syscall)
 target_link_libraries(dummy_main pthread)
-target_link_libraries(dummy_main bfunwind_static)
+target_link_libraries(dummy_main bfunwind)
 target_link_libraries(dummy_main -Wl,--whole-archive bfcrt_static -Wl,--no-whole-archive)
 
 # ------------------------------------------------------------------------------
