@@ -49,7 +49,7 @@
 extern "C" EXPORT_SYM clock_t
 times(struct tms *buf)
 {
-    ignored(buf);
+    bfignored(buf);
 
     UNHANDLED();
 
@@ -59,9 +59,9 @@ times(struct tms *buf)
 extern "C" EXPORT_SYM int
 execve(const char *path, char *const argv[], char *const envp[])
 {
-    ignored(path);
-    ignored(argv);
-    ignored(envp);
+    bfignored(path);
+    bfignored(argv);
+    bfignored(envp);
 
     UNHANDLED();
 
@@ -80,7 +80,7 @@ getpid(void)
 extern "C" EXPORT_SYM int
 isatty(int fd)
 {
-    ignored(fd);
+    bfignored(fd);
 
     UNHANDLED();
 
@@ -91,9 +91,9 @@ isatty(int fd)
 extern "C" EXPORT_SYM off_t
 lseek(int fd, off_t offset, int whence)
 {
-    ignored(fd);
-    ignored(offset);
-    ignored(whence);
+    bfignored(fd);
+    bfignored(offset);
+    bfignored(whence);
 
     UNHANDLED();
 
@@ -108,8 +108,8 @@ _init(void)
 extern "C" EXPORT_SYM int
 kill(pid_t _pid, int _sig)
 {
-    ignored(_pid);
-    ignored(_sig);
+    bfignored(_pid);
+    bfignored(_sig);
 
     UNHANDLED();
 
@@ -120,7 +120,7 @@ kill(pid_t _pid, int _sig)
 extern "C" EXPORT_SYM pid_t
 wait(int *status)
 {
-    ignored(status);
+    bfignored(status);
 
     UNHANDLED();
 
@@ -131,9 +131,9 @@ wait(int *status)
 extern "C" EXPORT_SYM _READ_WRITE_RETURN_TYPE
 read(int fd, void *buffer, size_t length)
 {
-    ignored(fd);
-    ignored(buffer);
-    ignored(length);
+    bfignored(fd);
+    bfignored(buffer);
+    bfignored(length);
 
     UNHANDLED();
 
@@ -144,7 +144,7 @@ read(int fd, void *buffer, size_t length)
 extern "C" EXPORT_SYM int
 unlink(const char *file)
 {
-    ignored(file);
+    bfignored(file);
 
     UNHANDLED();
 
@@ -164,7 +164,7 @@ fork(void)
 extern "C" EXPORT_SYM void *
 sbrk(ptrdiff_t __incr)
 {
-    ignored(__incr);
+    bfignored(__incr);
 
     UNHANDLED();
 
@@ -175,9 +175,9 @@ sbrk(ptrdiff_t __incr)
 extern "C" EXPORT_SYM int
 regcomp(regex_t *preg, const char *regex, int cflags)
 {
-    ignored(preg);
-    ignored(regex);
-    ignored(cflags);
+    bfignored(preg);
+    bfignored(regex);
+    bfignored(cflags);
 
     UNHANDLED();
 
@@ -187,8 +187,8 @@ regcomp(regex_t *preg, const char *regex, int cflags)
 extern "C" EXPORT_SYM int
 gettimeofday(struct timeval *tp, void *tzp)
 {
-    ignored(tp);
-    ignored(tzp);
+    bfignored(tp);
+    bfignored(tzp);
 
     UNHANDLED();
 
@@ -199,8 +199,8 @@ gettimeofday(struct timeval *tp, void *tzp)
 extern "C" EXPORT_SYM int
 clock_gettime(clockid_t clk_id, struct timespec *tp) __THROW
 {
-    ignored(clk_id);
-    ignored(tp);
+    bfignored(clk_id);
+    bfignored(tp);
 
     UNHANDLED();
 
@@ -212,11 +212,11 @@ extern "C" EXPORT_SYM int
 regexec(const regex_t *preg, const char *string,
         size_t nmatch, regmatch_t pmatch[], int eflags)
 {
-    ignored(preg);
-    ignored(string);
-    ignored(nmatch);
-    ignored(pmatch);
-    ignored(eflags);
+    bfignored(preg);
+    bfignored(string);
+    bfignored(nmatch);
+    bfignored(pmatch);
+    bfignored(eflags);
 
     UNHANDLED();
 
@@ -230,8 +230,8 @@ _fini(void)
 extern "C" EXPORT_SYM int
 stat(const char *pathname, struct stat *buf)
 {
-    ignored(pathname);
-    ignored(buf);
+    bfignored(pathname);
+    bfignored(buf);
 
     UNHANDLED();
 
@@ -242,8 +242,8 @@ stat(const char *pathname, struct stat *buf)
 extern "C" EXPORT_SYM int
 link(const char *oldpath, const char *newpath)
 {
-    ignored(oldpath);
-    ignored(newpath);
+    bfignored(oldpath);
+    bfignored(newpath);
 
     UNHANDLED();
 
@@ -254,7 +254,7 @@ link(const char *oldpath, const char *newpath)
 extern "C" EXPORT_SYM void
 _exit(int status)
 {
-    ignored(status);
+    bfignored(status);
 
     UNHANDLED();
 
@@ -264,8 +264,8 @@ _exit(int status)
 extern "C" EXPORT_SYM int
 open(const char *file, int mode, ...)
 {
-    ignored(file);
-    ignored(mode);
+    bfignored(file);
+    bfignored(mode);
 
     UNHANDLED();
 
@@ -278,14 +278,14 @@ regfree(regex_t *preg)
 {
     UNHANDLED();
 
-    ignored(preg);
+    bfignored(preg);
 }
 
 extern "C" EXPORT_SYM int
 fcntl(int fd, int cmd, ...)
 {
-    ignored(fd);
-    ignored(cmd);
+    bfignored(fd);
+    bfignored(cmd);
 
     UNHANDLED();
 
@@ -296,8 +296,8 @@ fcntl(int fd, int cmd, ...)
 extern "C" EXPORT_SYM int
 mkdir(const char *path, mode_t mode)
 {
-    ignored(path);
-    ignored(mode);
+    bfignored(path);
+    bfignored(mode);
 
     UNHANDLED();
 
@@ -308,9 +308,9 @@ mkdir(const char *path, mode_t mode)
 extern "C" EXPORT_SYM int
 posix_memalign(void **memptr, size_t alignment, size_t size)
 {
-    ignored(memptr);
-    ignored(alignment);
-    ignored(size);
+    bfignored(memptr);
+    bfignored(alignment);
+    bfignored(size);
 
     UNHANDLED();
 
@@ -320,7 +320,7 @@ posix_memalign(void **memptr, size_t alignment, size_t size)
 extern "C" EXPORT_SYM int
 close(int fd)
 {
-    ignored(fd);
+    bfignored(fd);
 
     UNHANDLED();
 
@@ -331,9 +331,9 @@ close(int fd)
 extern "C" EXPORT_SYM int
 sigprocmask(int how, const sigset_t *set, sigset_t *oldset)
 {
-    ignored(how);
-    ignored(set);
-    ignored(oldset);
+    bfignored(how);
+    bfignored(set);
+    bfignored(oldset);
 
     UNHANDLED();
 
@@ -344,7 +344,7 @@ sigprocmask(int how, const sigset_t *set, sigset_t *oldset)
 extern "C" EXPORT_SYM long
 sysconf(int name)
 {
-    ignored(name);
+    bfignored(name);
 
     UNHANDLED();
 
@@ -355,8 +355,8 @@ sysconf(int name)
 extern "C" EXPORT_SYM int
 nanosleep(const struct timespec *req, struct timespec *rem)
 {
-    ignored(req);
-    ignored(rem);
+    bfignored(req);
+    bfignored(rem);
 
     UNHANDLED();
 
@@ -383,8 +383,8 @@ realloc(void *ptr, size_t size)
 extern "C" EXPORT_SYM int
 fstat(int file, struct stat *sbuf)
 {
-    ignored(file);
-    ignored(sbuf);
+    bfignored(file);
+    bfignored(sbuf);
 
     errno = -ENOSYS;
     return -1;
@@ -393,8 +393,8 @@ fstat(int file, struct stat *sbuf)
 extern "C" EXPORT_SYM int
 getentropy(void *buf, size_t buflen)
 {
-    ignored(buf);
-    ignored(buflen);
+    bfignored(buf);
+    bfignored(buflen);
 
     errno = -EIO;
     return -1;
@@ -403,14 +403,14 @@ getentropy(void *buf, size_t buflen)
 extern "C" EXPORT_SYM int
 __fpclassifyf(float val)
 {
-    ignored(val);
+    bfignored(val);
     return 0;  // FP_NAN
 }
 
 extern "C" EXPORT_SYM int
 __fpclassifyd(double val)
 {
-    ignored(val);
+    bfignored(val);
     return 0;  // FP_NAN
 }
 

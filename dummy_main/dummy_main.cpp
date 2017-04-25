@@ -33,8 +33,8 @@ derived2 g_derived2;
 int
 main(int argc, char *argv[])
 {
-    ignored(argc);
-    ignored(argv);
+    bfignored(argc);
+    bfignored(argv);
 
     try {
         throw std::runtime_error("test exceptions");
@@ -55,9 +55,9 @@ char g_memory[0x10000] = {};
 extern "C" EXPORT_SYM int
 write(int file, const void *buffer, size_t count)
 {
-    ignored(file);
-    ignored(buffer);
-    ignored(count);
+    bfignored(file);
+    bfignored(buffer);
+    bfignored(count);
 
     return 0;
 }
@@ -65,7 +65,7 @@ write(int file, const void *buffer, size_t count)
 extern "C" EXPORT_SYM void *
 _malloc_r(struct _reent *ent, size_t size)
 {
-    ignored(ent);
+    bfignored(ent);
 
     auto *addr = &g_memory[g_cursor];
     g_cursor += size;
@@ -76,14 +76,14 @@ _malloc_r(struct _reent *ent, size_t size)
 extern "C" EXPORT_SYM void
 _free_r(struct _reent *ent, void *ptr)
 {
-    ignored(ent);
-    ignored(ptr);
+    bfignored(ent);
+    bfignored(ptr);
 }
 
 extern "C" EXPORT_SYM void *
 _calloc_r(struct _reent *ent, size_t nmemb, size_t size)
 {
-    ignored(ent);
+    bfignored(ent);
 
     if (auto ptr = malloc(nmemb * size)) {
         return memset(ptr, 0, nmemb * size);
@@ -95,9 +95,9 @@ _calloc_r(struct _reent *ent, size_t nmemb, size_t size)
 extern "C" EXPORT_SYM void *
 _realloc_r(struct _reent *ent, void *ptr, size_t size)
 {
-    ignored(ent);
-    ignored(ptr);
-    ignored(size);
+    bfignored(ent);
+    bfignored(ptr);
+    bfignored(size);
 
     return nullptr;
 }

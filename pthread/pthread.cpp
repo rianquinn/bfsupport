@@ -61,8 +61,9 @@ void *threadSpecificData[MAX_THREAD_SPECIFIC_DATA] = {0};
 extern "C" EXPORT_SYM int
 pthread_cond_broadcast(pthread_cond_t *cond)
 {
-    if (!cond)
+    if (!cond) {
         return -EINVAL;
+    }
 
     __sync_lock_release(cond);
 
@@ -79,11 +80,13 @@ pthread_cond_destroy(pthread_cond_t *)
 extern "C" EXPORT_SYM int
 pthread_cond_init(pthread_cond_t *cond, const pthread_condattr_t *attr)
 {
-    if (attr)
+    if (attr) {
         ARG_UNSUPPORTED("attr");
+    }
 
-    if (!cond)
+    if (!cond) {
         return -EINVAL;
+    }
 
     *cond = 0;
     return 0;
@@ -106,8 +109,9 @@ pthread_cond_timedwait(pthread_cond_t *, pthread_mutex_t *, const struct timespe
 extern "C" EXPORT_SYM int
 pthread_cond_wait(pthread_cond_t *cond, pthread_mutex_t *mutex)
 {
-    if (!cond || !mutex)
+    if (!cond || !mutex) {
         return -EINVAL;
+    }
 
     *cond = 1;
 
@@ -135,8 +139,9 @@ pthread_equal(pthread_t, pthread_t)
 extern "C" EXPORT_SYM void *
 pthread_getspecific(pthread_key_t key)
 {
-    if (key > MAX_THREAD_SPECIFIC_DATA)
+    if (key > MAX_THREAD_SPECIFIC_DATA) {
         return nullptr;
+    }
 
 #ifdef LOOKUP_TLS_DATA
     auto threadSpecificData = reinterpret_cast<void **>(thread_context_tlsptr());
@@ -157,11 +162,13 @@ pthread_key_create(pthread_key_t *key, void (*destructor)(void *))
 {
     static int64_t g_keys = 0;
 
-    if (destructor)
+    if (destructor) {
         ARG_UNSUPPORTED("destructor");
+    }
 
-    if (!key)
+    if (!key) {
         return -EINVAL;
+    }
 
     *key = __sync_fetch_and_add(&g_keys, 1);
 
@@ -185,11 +192,13 @@ pthread_mutex_destroy(pthread_mutex_t *)
 extern "C" EXPORT_SYM int
 pthread_mutex_init(pthread_mutex_t *mutex, const pthread_mutexattr_t *attr)
 {
-    if (attr)
+    if (attr) {
         ARG_UNSUPPORTED("attr");
+    }
 
-    if (!mutex)
+    if (!mutex) {
         return -EINVAL;
+    }
 
     *mutex = 0;
     return 0;
@@ -198,8 +207,9 @@ pthread_mutex_init(pthread_mutex_t *mutex, const pthread_mutexattr_t *attr)
 extern "C" EXPORT_SYM int
 pthread_mutex_lock(pthread_mutex_t *mutex)
 {
-    if (!mutex)
+    if (!mutex) {
         return -EINVAL;
+    }
 
     while (__sync_lock_test_and_set(mutex, 1)) { while (*mutex); };
 
@@ -216,8 +226,9 @@ pthread_mutex_trylock(pthread_mutex_t *)
 extern "C" EXPORT_SYM int
 pthread_mutex_unlock(pthread_mutex_t *mutex)
 {
-    if (!mutex)
+    if (!mutex) {
         return -EINVAL;
+    }
 
     __sync_lock_release(mutex);
 
@@ -248,11 +259,13 @@ pthread_mutexattr_settype(pthread_mutexattr_t *, int)
 extern "C" EXPORT_SYM int
 pthread_once(pthread_once_t *once, void (*init)(void))
 {
-    if (!once || !init)
+    if (!once || !init) {
         return -EINVAL;
+    }
 
-    if (__sync_fetch_and_add(once, 1) == 0)
+    if (__sync_fetch_and_add(once, 1) == 0) {
         (*init)();
+    }
 
     return 0;
 }
@@ -267,8 +280,9 @@ pthread_self(void)
 extern "C" EXPORT_SYM int
 pthread_setspecific(pthread_key_t key, const void *data)
 {
-    if (key > MAX_THREAD_SPECIFIC_DATA)
+    if (key > MAX_THREAD_SPECIFIC_DATA) {
         return -EINVAL;
+    }
 
 #ifdef LOOKUP_TLS_DATA
     auto threadSpecificData = reinterpret_cast<void **>(thread_context_tlsptr());
