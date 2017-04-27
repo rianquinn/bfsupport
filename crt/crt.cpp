@@ -36,7 +36,7 @@ extern eh_frame_t __g_eh_frame_list[MAX_NUM_MODULES];
 EXPORT_SYM void *__dso_handle = 0;
 
 extern "C" void
-__bareflank_init(section_info_t *info) noexcept
+__bareflank_init(const section_info_t *info) noexcept
 {
     if (info->init_addr != nullptr) {
         reinterpret_cast<init_t>(info->init_addr)();
@@ -53,7 +53,7 @@ __bareflank_init(section_info_t *info) noexcept
 }
 
 extern "C" void
-__bareflank_fini(section_info_t *info) noexcept
+__bareflank_fini(const section_info_t *info) noexcept
 {
     if (info->fini_array_addr != nullptr) {
         auto n = info->fini_array_size >> 3;
@@ -70,7 +70,7 @@ __bareflank_fini(section_info_t *info) noexcept
 }
 
 extern "C" void
-__bareflank_register_eh_frame(section_info_t *info) noexcept
+__bareflank_register_eh_frame(const section_info_t *info) noexcept
 {
     gsl::at(__g_eh_frame_list, __g_eh_frame_list_num).addr = info->eh_frame_addr;
     gsl::at(__g_eh_frame_list, __g_eh_frame_list_num).size = info->eh_frame_size;
@@ -78,7 +78,7 @@ __bareflank_register_eh_frame(section_info_t *info) noexcept
 }
 
 extern "C" int
-_start_c(crt_info_t *info) noexcept
+_start_c(const crt_info_t *info) noexcept
 {
     // TODO:
     //
