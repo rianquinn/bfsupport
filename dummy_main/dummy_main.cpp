@@ -19,6 +19,7 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
+#include <bfgsl.h>
 #include <bftypes.h>
 #include <bfexports.h>
 
@@ -33,8 +34,9 @@ derived2 g_derived2;
 int
 main(int argc, char *argv[])
 {
-    bfignored(argc);
-    bfignored(argv);
+    if (argc != 2) {
+        return -1;
+    }
 
     try {
         throw std::runtime_error("test exceptions");
@@ -42,7 +44,24 @@ main(int argc, char *argv[])
     catch(std::exception &)
     { }
 
-    return g_derived1.foo(atoi(argv[0])) + g_derived2.foo(atoi(argv[1]));
+    return g_derived1.foo(gsl::narrow_cast<int>(atoi(argv[0]))) +
+           g_derived2.foo(gsl::narrow_cast<int>(atoi(argv[1])));
+}
+
+extern "C" int64_t
+bfmain(int64_t arg1, int64_t arg2, int64_t arg3, int64_t arg4)
+{
+    bfignored(arg3);
+    bfignored(arg4);
+
+    try {
+        throw std::runtime_error("test exceptions");
+    }
+    catch(std::exception &)
+    { }
+
+    return g_derived1.foo(gsl::narrow_cast<int>(arg1)) +
+           g_derived2.foo(gsl::narrow_cast<int>(arg2));
 }
 
 // -----------------------------------------------------------------------------
