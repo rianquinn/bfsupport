@@ -24,13 +24,13 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-stack-protector")
 # Targets
 # ------------------------------------------------------------------------------
 
-add_library(call OBJECT syscall.cpp)
-add_library(syscall SHARED $<TARGET_OBJECTS:call>)
-add_library(syscall_static STATIC $<TARGET_OBJECTS:call>)
+add_library(syscall OBJECT syscall.cpp)
+add_library(bfsyscall SHARED $<TARGET_OBJECTS:syscall>)
+add_library(bfsyscall_static STATIC $<TARGET_OBJECTS:syscall>)
 
 # ------------------------------------------------------------------------------
 # Install
 # ------------------------------------------------------------------------------
 
-install(TARGETS syscall DESTINATION ${BAREFLANK_SYSROOT_PATH}/lib)
-install(TARGETS syscall_static DESTINATION ${BAREFLANK_SYSROOT_PATH}/lib)
+install(TARGETS bfsyscall DESTINATION ${BAREFLANK_SYSROOT_PATH}/lib)
+install(TARGETS bfsyscall_static DESTINATION ${BAREFLANK_SYSROOT_PATH}/lib)
