@@ -22,6 +22,7 @@
 #include <bfgsl.h>
 #include <bftypes.h>
 #include <bfexports.h>
+#include <bfsupport.h>
 
 #include <cstring>
 #include <stdexcept>
@@ -49,10 +50,13 @@ main(int argc, char *argv[])
 }
 
 extern "C" int64_t
-bfmain(int64_t arg1, int64_t arg2, int64_t arg3, int64_t arg4)
+bfmain(uintptr_t request, uintptr_t arg1, uintptr_t arg2, uintptr_t arg3)
 {
     bfignored(arg3);
-    bfignored(arg4);
+
+    if (request < BF_REQUEST_END) {
+        return 0;
+    }
 
     try {
         throw std::runtime_error("test exceptions");

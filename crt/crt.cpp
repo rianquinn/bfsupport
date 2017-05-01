@@ -28,7 +28,25 @@
 typedef void (*init_t)();
 typedef void (*fini_t)();
 
-int main(int argc, const char *argv[]);
+int __attribute__((weak))
+main(int argc, const char *argv[])
+{
+    bfignored(argc);
+    bfignored(argv);
+
+    return -1;
+}
+
+extern "C" int64_t __attribute__((weak))
+bfmain(uintptr_t request, uintptr_t arg1, uintptr_t arg2, uintptr_t arg3)
+{
+    bfignored(request);
+    bfignored(arg1);
+    bfignored(arg2);
+    bfignored(arg3);
+
+    return -1;
+}
 
 extern int __g_eh_frame_list_num;
 extern eh_frame_t __g_eh_frame_list[MAX_NUM_MODULES];
@@ -77,9 +95,15 @@ __bareflank_register_eh_frame(const section_info_t *info) noexcept
     __g_eh_frame_list_num++;
 }
 
-extern "C" int
+extern "C" int64_t
 _start_c(const crt_info_t *info) noexcept
 {
+    int64_t ret;
+
+    if (info == nullptr) {
+        return -1;
+    }
+
     // TODO:
     //
     // - Need to set the program break here.
@@ -87,19 +111,28 @@ _start_c(const crt_info_t *info) noexcept
     //   actually return
     //
 
-    for (auto i = 0; i < info->info_num; i++) {
-        auto sinfo = &gsl::at(info->info, i);
+    if (info->arg_type == 0 || info->request == BF_REQUEST_INIT) {
+        for (auto i = 0; i < info->info_num; i++) {
+            auto sinfo = &gsl::at(info->info, i);
 
-        __bareflank_init(sinfo);
-        __bareflank_register_eh_frame(sinfo);
+            __bareflank_init(sinfo);
+            __bareflank_register_eh_frame(sinfo);
+        }
     }
 
-    auto ret = main(info->argc, info->argv);
+    if (info->arg_type == 0) {
+        ret = main(info->argc, info->argv);
+    }
+    else {
+        ret = bfmain(info->request, info->arg1, info->arg2, info->arg3);
+    }
 
-    for (auto i = 0; i < info->info_num; i++) {
-        auto sinfo = &gsl::at(info->info, i);
+    if (info->arg_type == 0 || info->request == BF_REQUEST_FINI) {
+        for (auto i = 0; i < info->info_num; i++) {
+            auto sinfo = &gsl::at(info->info, i);
 
-        __bareflank_fini(sinfo);
+            __bareflank_fini(sinfo);
+        }
     }
 
     return ret;
