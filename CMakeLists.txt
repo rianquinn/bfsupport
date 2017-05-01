@@ -14,6 +14,15 @@ endif()
 include("${CMAKE_INSTALL_PREFIX}/cmake/CMakeGlobal_Project.txt")
 
 # ------------------------------------------------------------------------------
+# Flags
+# ------------------------------------------------------------------------------
+
+if(CMAKE_TOOLCHAIN_FILE)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -nostdlib-c")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -nostdlib-c -nostdlib-c++")
+endif()
+
+# ------------------------------------------------------------------------------
 # Subdirectories
 # ------------------------------------------------------------------------------
 
