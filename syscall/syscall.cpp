@@ -440,3 +440,23 @@ EXPORT_SYM eh_frame_t __g_eh_frame_list[MAX_NUM_MODULES] = {};
 extern "C" EXPORT_SYM struct eh_frame_t *
 get_eh_frame_list() noexcept
 { return __g_eh_frame_list; }
+
+extern "C" EXPORT_SYM void *
+WEAK_SYM _malloc_r(struct _reent *, size_t)
+{ return nullptr; }
+
+extern "C" EXPORT_SYM void
+WEAK_SYM _free_r(struct _reent *, void *)
+{ }
+
+extern "C" EXPORT_SYM void *
+WEAK_SYM _calloc_r(struct _reent *, size_t , size_t)
+{ return nullptr; }
+
+extern "C" EXPORT_SYM void *
+WEAK_SYM _realloc_r(struct _reent *, void *, size_t)
+{ return nullptr; }
+
+extern "C" EXPORT_SYM int
+WEAK_SYM write(int, const void *, size_t)
+{ return 0; }
