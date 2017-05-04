@@ -41,9 +41,9 @@
         const char *str_text = "\033[1;33mWARNING\033[0m: unsupported libc function called = "; \
         const char *str_func = __PRETTY_FUNCTION__; \
         const char *str_endl = "\n"; \
-        write(0, str_text, strlen(str_text)); \
-        write(0, str_func, strlen(str_func)); \
-        write(0, str_endl, strlen(str_endl)); \
+        write(1, str_text, strlen(str_text)); \
+        write(1, str_func, strlen(str_func)); \
+        write(1, str_endl, strlen(str_endl)); \
     }
 
 extern "C" EXPORT_SYM clock_t
@@ -72,9 +72,7 @@ execve(const char *path, char *const argv[], char *const envp[])
 extern "C" EXPORT_SYM pid_t
 getpid(void)
 {
-    UNHANDLED();
-
-    return 0;
+    return 1;
 }
 
 extern "C" EXPORT_SYM int
@@ -442,23 +440,3 @@ EXPORT_SYM eh_frame_t __g_eh_frame_list[MAX_NUM_MODULES] = {};
 extern "C" EXPORT_SYM struct eh_frame_t *
 get_eh_frame_list() noexcept
 { return __g_eh_frame_list; }
-
-extern "C" EXPORT_SYM void *
-WEAK_SYM _malloc_r(struct _reent *, size_t)
-{ return nullptr; }
-
-extern "C" EXPORT_SYM void
-WEAK_SYM _free_r(struct _reent *, void *)
-{ }
-
-extern "C" EXPORT_SYM void *
-WEAK_SYM _calloc_r(struct _reent *, size_t , size_t)
-{ return nullptr; }
-
-extern "C" EXPORT_SYM void *
-WEAK_SYM _realloc_r(struct _reent *, void *, size_t)
-{ return nullptr; }
-
-extern "C" EXPORT_SYM int
-WEAK_SYM write(int, const void *, size_t)
-{ return 0; }
