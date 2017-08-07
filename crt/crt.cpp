@@ -24,6 +24,7 @@
 #include <bfsupport.h>
 #include <bfconstants.h>
 #include <bfehframelist.h>
+#include <bfdwarf.h>
 
 typedef void (*init_t)();
 typedef void (*fini_t)();
@@ -50,6 +51,8 @@ bfmain(uintptr_t request, uintptr_t arg1, uintptr_t arg2, uintptr_t arg3)
 
 extern int __g_eh_frame_list_num;
 extern eh_frame_t __g_eh_frame_list[MAX_NUM_MODULES];
+extern int __g_dwarf_sections_num;
+extern dwarf_sections_t __g_dwarf_sections[MAX_NUM_MODULES];
 
 EXPORT_SYM void *__dso_handle = 0;
 
@@ -95,6 +98,24 @@ __bareflank_register_eh_frame(const section_info_t *info) noexcept
     __g_eh_frame_list_num++;
 }
 
+extern "C" void
+__bareflank_register_debug_info(const section_info_t *info) noexcept
+{
+    auto view = gsl::make_span(__g_dwarf_sections);
+
+    view[__g_dwarf_sections_num].debug_info_addr = info->debug_info_addr;
+    view[__g_dwarf_sections_num].debug_info_size = info->debug_info_size;
+    view[__g_dwarf_sections_num].debug_abbrev_addr = info->debug_abbrev_addr;
+    view[__g_dwarf_sections_num].debug_abbrev_size = info->debug_abbrev_size;
+    view[__g_dwarf_sections_num].debug_line_addr = info->debug_line_addr;
+    view[__g_dwarf_sections_num].debug_line_size = info->debug_line_size;
+    view[__g_dwarf_sections_num].debug_str_addr = info->debug_str_addr;
+    view[__g_dwarf_sections_num].debug_str_size = info->debug_str_size;
+    view[__g_dwarf_sections_num].debug_ranges_addr = info->debug_ranges_addr;
+    view[__g_dwarf_sections_num].debug_ranges_size = info->debug_ranges_size;
+    __g_dwarf_sections_num++;
+}
+
 extern "C" int64_t
 _start_c(const crt_info_t *info) noexcept
 {
@@ -117,6 +138,7 @@ _start_c(const crt_info_t *info) noexcept
 
             __bareflank_init(sinfo);
             __bareflank_register_eh_frame(sinfo);
+            __bareflank_register_debug_info(sinfo);
         }
     }
 
