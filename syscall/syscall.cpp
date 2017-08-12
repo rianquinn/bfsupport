@@ -436,10 +436,16 @@ __stack_chk_fail(void) noexcept
 
 EXPORT_SYM int __g_eh_frame_list_num = 0;
 EXPORT_SYM eh_frame_t __g_eh_frame_list[MAX_NUM_MODULES] = {};
+EXPORT_SYM int __g_dwarf_sections_num = 0;
+EXPORT_SYM dwarf_sections_t __g_dwarf_sections[MAX_NUM_MODULES] = {};
 
 extern "C" EXPORT_SYM struct eh_frame_t *
 get_eh_frame_list() noexcept
 { return __g_eh_frame_list; }
+
+extern "C" EXPORT_SYM struct dwarf_sections_t *
+get_dwarf_sections() noexcept
+{ return __g_dwarf_sections; }
 
 extern "C" EXPORT_SYM void *
 WEAK_SYM _malloc_r(struct _reent *, size_t)
