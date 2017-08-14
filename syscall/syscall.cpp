@@ -35,6 +35,7 @@
 #include <bfexports.h>
 #include <bfconstants.h>
 #include <bfehframelist.h>
+#include <bfdwarf.h>
 
 #define UNHANDLED() \
     { \
@@ -253,9 +254,6 @@ extern "C" EXPORT_SYM void
 _exit(int status)
 {
     bfignored(status);
-
-    UNHANDLED();
-
     while (1);
 }
 
@@ -456,7 +454,7 @@ WEAK_SYM _free_r(struct _reent *, void *)
 { }
 
 extern "C" EXPORT_SYM void *
-WEAK_SYM _calloc_r(struct _reent *, size_t , size_t)
+WEAK_SYM _calloc_r(struct _reent *, size_t, size_t)
 { return nullptr; }
 
 extern "C" EXPORT_SYM void *

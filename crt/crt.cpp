@@ -93,27 +93,27 @@ __bareflank_fini(const section_info_t *info) noexcept
 extern "C" void
 __bareflank_register_eh_frame(const section_info_t *info) noexcept
 {
-    gsl::at(__g_eh_frame_list, __g_eh_frame_list_num).addr = info->eh_frame_addr;
-    gsl::at(__g_eh_frame_list, __g_eh_frame_list_num).size = info->eh_frame_size;
-    __g_eh_frame_list_num++;
+    auto elem = &gsl::at(__g_eh_frame_list, __g_eh_frame_list_num++);
+
+    elem->addr = info->eh_frame_addr;
+    elem->size = info->eh_frame_size;
 }
 
 extern "C" void
 __bareflank_register_debug_info(const section_info_t *info) noexcept
 {
-    auto view = gsl::make_span(__g_dwarf_sections);
+    auto elem = &gsl::at(__g_dwarf_sections, __g_dwarf_sections_num++);
 
-    view[__g_dwarf_sections_num].debug_info_addr = info->debug_info_addr;
-    view[__g_dwarf_sections_num].debug_info_size = info->debug_info_size;
-    view[__g_dwarf_sections_num].debug_abbrev_addr = info->debug_abbrev_addr;
-    view[__g_dwarf_sections_num].debug_abbrev_size = info->debug_abbrev_size;
-    view[__g_dwarf_sections_num].debug_line_addr = info->debug_line_addr;
-    view[__g_dwarf_sections_num].debug_line_size = info->debug_line_size;
-    view[__g_dwarf_sections_num].debug_str_addr = info->debug_str_addr;
-    view[__g_dwarf_sections_num].debug_str_size = info->debug_str_size;
-    view[__g_dwarf_sections_num].debug_ranges_addr = info->debug_ranges_addr;
-    view[__g_dwarf_sections_num].debug_ranges_size = info->debug_ranges_size;
-    __g_dwarf_sections_num++;
+    elem->debug_info_addr = info->debug_info_addr;
+    elem->debug_info_size = info->debug_info_size;
+    elem->debug_abbrev_addr = info->debug_abbrev_addr;
+    elem->debug_abbrev_size = info->debug_abbrev_size;
+    elem->debug_line_addr = info->debug_line_addr;
+    elem->debug_line_size = info->debug_line_size;
+    elem->debug_str_addr = info->debug_str_addr;
+    elem->debug_str_size = info->debug_str_size;
+    elem->debug_ranges_addr = info->debug_ranges_addr;
+    elem->debug_ranges_size = info->debug_ranges_size;
 }
 
 extern "C" int64_t
