@@ -42,7 +42,7 @@ main(int argc, char *argv[])
     try {
         throw std::runtime_error("test exceptions");
     }
-    catch(std::exception &)
+    catch (std::exception &)
     { }
 
     return g_derived1.foo(gsl::narrow_cast<int>(atoi(argv[0]))) +
@@ -61,7 +61,7 @@ bfmain(uintptr_t request, uintptr_t arg1, uintptr_t arg2, uintptr_t arg3)
     try {
         throw std::runtime_error("test exceptions");
     }
-    catch(std::exception &)
+    catch (std::exception &)
     { }
 
     return g_derived1.foo(gsl::narrow_cast<int>(arg1)) +
